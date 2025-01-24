@@ -54,7 +54,7 @@
             download(){
                 if (this.document && this.document.file) {
                     axios.get(this.document.file, { responseType: 'blob' })
-                        .then(response => {
+                        .then(async response => {
                             const url = URL.createObjectURL(new Blob([response.data]));
                             const link = document.createElement('a');
                             link.href = url;
@@ -63,6 +63,9 @@
                             link.click();
                             document.body.removeChild(link);
                             URL.revokeObjectURL(url);
+                            await axios.post('/documents/downloadfile', {
+                                id: this.document.documentId
+                            });
                         })
                         .catch(error => {
                             console.error('파일 다운로드 중 오류 발생:', error);

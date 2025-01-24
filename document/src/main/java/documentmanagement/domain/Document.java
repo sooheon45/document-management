@@ -76,7 +76,7 @@ public class Document {
         FileLoaded fileLoaded = new FileLoaded(this);
         fileLoaded.setId(document.getId());
         fileLoaded.setStatus("SUCCESS");
-        fileLoaded.setReason("파일이 로드되었습니다.");
+        fileLoaded.setReason("파일을 불러왔습니다.");
         fileLoaded.publishAfterCommit();
     }
 
