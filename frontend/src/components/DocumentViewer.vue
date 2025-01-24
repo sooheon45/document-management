@@ -1,37 +1,37 @@
 <template>
-    <v-card outlined>
-        <v-btn text color="deep-purple lighten-2" large @click="back()">Back</v-btn>
-        <v-card-title>
-            {{ document.name }}
-        </v-card-title>
-        <v-card-actions>
-            <v-btn
-                    color="primary"
-                    text
-                    @click="download()"
-            >
-                Download
-            </v-btn>
-            <v-btn
-                    color="primary"
-                    text
-                    @click="remove"
-            >
-                Delete
-            </v-btn>
-        </v-card-actions>
-        <div>
-            <v-card-text v-if="type && type.includes('image')">
-                <img :src="document.file" :alt="document.name" style="max-width: 100%; height: auto;" />
-            </v-card-text>
-            <v-card-text v-if="type && type.includes('pdf')">
-                <embed :src="document.file" type="application/pdf" width="100%" height="100%" />
-            </v-card-text>
-            <v-card-text v-if="type && type.includes('video')">
-                <video :src="document.file" controls width="100%" height="50%"></video>
-            </v-card-text>
+    <div style="height: 100%;">
+        <v-card outlined>
+            <v-btn text color="deep-purple lighten-2" large @click="back()">Back</v-btn>
+            <v-card-title>
+                {{ document.name }}
+            </v-card-title>
+            <v-card-actions>
+                <v-btn
+                        color="primary"
+                        text
+                        @click="download()"
+                >
+                    Download
+                </v-btn>
+                <v-btn
+                        color="primary"
+                        text
+                        @click="remove"
+                >
+                    Delete
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+        <div v-if="type && type.includes('image')" style="height: 100%;">
+            <img :src="document.file" :alt="document.name" style="max-width: 100%; height: auto;" />
         </div>
-    </v-card>
+        <div v-if="type && type.includes('pdf')" style="height: 100%; margin-left: 5px; margin-bottom: 5px;">
+            <embed :src="document.file" type="application/pdf" width="100%" height="100%" />
+        </div>
+        <div v-if="type && type.includes('video')" style="height: 100%;">
+            <video :src="document.file" controls width="100%" height="50%"></video>
+        </div>
+    </div> 
 </template>
 
 

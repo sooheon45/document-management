@@ -1,5 +1,5 @@
 <template>
-    <div v-if="id">
+    <div v-if="id" style="height: 100%;">
         <Document tag="viewer" :id="id"></Document>
     </div>
 </template>

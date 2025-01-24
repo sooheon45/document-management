@@ -42,11 +42,6 @@ public class Document {
     }
 
     public void saveFile(MultipartFile file) throws SerialException, SQLException {
-        setName(file.getOriginalFilename());
-        setFileType(file.getContentType());
-        setFileSize(file.getSize());
-        setTimeStamp(new Date());
-              
         FileSaved fileSaved = new FileSaved(this);
         fileSaved.setName(file.getOriginalFilename());
         fileSaved.setTimeStamp(new Date());

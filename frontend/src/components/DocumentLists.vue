@@ -61,7 +61,6 @@
                 this.$router.push({ path: `/file/${value.id}` });
             },
             formattedFileType(fileType) {
-                if(fileType.startsWith("application/vnd.openxmlformats-officedocument")) return "docx"
                 return fileType;
             },
             formattedTimeStamp(timeStamp) {

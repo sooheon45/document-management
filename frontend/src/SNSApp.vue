@@ -49,7 +49,7 @@
         </div>
 
         <v-main>
-            <v-container style="padding:0px;" v-if="urlPath" fluid>
+            <v-container style="padding:0px; height: 100%;" v-if="urlPath" fluid>
                 <router-view></router-view>
             </v-container>
             <v-container style="padding:0px;" v-else fluid>

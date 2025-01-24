@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,9 +78,11 @@ public class DocumentController {
             String contentType = file.getContentType();
             String originalFilename = file.getOriginalFilename();
             String timestamp = String.valueOf(System.currentTimeMillis());
-            String filename = timestamp + "_" + originalFilename;
-            String filePath = Paths.get(uploadDir, filename).toString();
-            String previewPath = Paths.get(previewDir, "preview_" + filename + ".png").toString();
+            String fileName = Paths.get(originalFilename).toString();
+
+            String tmpFileName = timestamp + "_" + originalFilename;
+            String filePath = Paths.get(uploadDir, tmpFileName).toString();
+            String previewPath = Paths.get(previewDir, "preview_" + tmpFileName + ".png").toString();
 
             // 허용된 파일 타입 검사
             if (!contentType.startsWith("image/") && 
@@ -91,13 +94,16 @@ public class DocumentController {
             try {
                 // Document 객체 생성 및 저장
                 Document document = new Document();
-               
+                document.setName(fileName);
+                document.setFileType(contentType);
                 document.setFileType(contentType);
                 document.setFilePath(filePath);
                 document.setPreviewPath(previewPath);
+                document.setFileSize(file.getSize());
+                document.setTimeStamp(new Date()); 
                 
                  // 미리보기 이미지 생성 및 경로 저장
-                documentService.saveFileAsync(file, filePath);
+                documentService.saveFile(file, filePath);
                 documentService.generateAndSavePreviewImage(document, file, previewPath);
                
                 document.saveFile(file);

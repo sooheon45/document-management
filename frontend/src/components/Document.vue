@@ -1,5 +1,5 @@
 <template>
-    <div style="width: -webkit-fill-available; height: -webkit-fill-available;">
+    <div style="width: -webkit-fill-available; height: 100%;">
         <div v-if="tag == 'upload'" style="width: 100%; height: 100%;">
             <DocumentUpload></DocumentUpload>
         </div>

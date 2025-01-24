@@ -22,7 +22,7 @@ import org.jcodec.scale.AWTUtil;
 public class DocumentService {
 
     @Async
-    public void saveFileAsync(MultipartFile file, String filePath) throws IOException {
+    public void saveFile(MultipartFile file, String filePath) throws IOException {
         try {
             FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(filePath));
         } catch (IOException e) {
@@ -45,7 +45,7 @@ public class DocumentService {
     
                 previewImage = pdfRenderer.renderImageWithDPI(0, 300); // 첫 페이지를 300 DPI로 렌더링
             } else if (fileType.startsWith("image/")) {
-                previewImage = ImageIO.read(file);
+                previewImage = ImageIO.read(mpfile.getInputStream());
             } else if (fileType.startsWith("video/")) {
                 previewImage = AWTUtil.toBufferedImage(FrameGrab.getFrameFromFile(file, 5));
             }
