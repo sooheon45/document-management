@@ -2,6 +2,8 @@ package documentmanagement.domain;
 
 import documentmanagement.domain.*;
 import documentmanagement.infra.AbstractEvent;
+
+import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.*;
 import lombok.*;
@@ -15,7 +17,9 @@ public class FileSaved extends AbstractEvent {
     private String name;
     private String userId;
     private String userName;
+    private String fileType;
     private String text;
+    private Blob file;
     private Date timeStamp;
     private String status;
     private String reason;

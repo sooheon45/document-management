@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: document
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
 ---
 
 spring:
@@ -45,6 +49,9 @@ logging:
     org.hibernate.type: trace
     org.springframework.cloud: debug
 
+file:
+    upload: "/Users/heon/Documents/workspace/testFiles/uploads/"
+    preview: "/Users/heon/Documents/workspace/testFiles/uploads/previews/"
 
 server:
   port: 8082

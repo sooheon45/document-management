@@ -15,133 +15,51 @@
         </v-card>
         <v-col style="margin-bottom:40px;">
             <div class="text-center">
-                <v-dialog
-                        v-model="openDialog"
-                        width="332.5"
-                        fullscreen
-                        hide-overlay
-                        transition="dialog-bottom-transition"
-                >
-                    <DocumentDocument :offline="offline" class="video-card" :isNew="true" :editMode="true" v-model="newValue" 
-                            @add="append" v-if="tick"/>
+                <div style="text-align: left; font-size: larger; font-weight: bold;">새 파일</div>
+                <Document tag="upload" style="width: 150px; height: 50px;"></Document>
+                
 
-                    <v-btn
-                            style="postition:absolute; top:2%; right:2%"
-                            @click="closeDialog()"
-                            depressed
-                            icon 
-                            absolute
-                    >
-                        <v-icon>mdi-close</v-icon>
-                    </v-btn>
-                </v-dialog>
+                <div style="text-align: left; font-size: larger; font-weight: bold; margin-top: 20px;">파일 리스트</div>
+                <Document tag="list"></Document>
+                <v-spacer></v-spacer>
 
-                <v-row>
-                    <v-card
-                        class="mx-auto"
-                        style="height:300px; width:300px; margin-bottom:20px; text-align: center;"
-                        outlined
-                    >
-                        <v-list-item>
-                            <v-list-item-avatar 
-                                class="mx-auto"
-                                size="80"
-                                style="margin-top:80px;"
-                            ><v-icon color="primary" x-large>mdi-plus</v-icon>
-                            </v-list-item-avatar>
-                        </v-list-item>
+                <div style="text-align: left; font-size: larger; font-weight: bold; margin-top: 20px;">파일 검색</div>
+                <Document tag="search"></Document>
+                <v-spacer></v-spacer>
 
-                        <v-card-actions>
-                            <v-btn 
-                                v-on="on"
-                                class="mx-auto"
-                                outlined
-                                rounded
-                                @click="openDialog=true;"
-                                color="primary"
-                                style="font-weight:500; font-size:20px; padding:15px; border:solid 2px; max-width:250px; overflow:hidden"
-                            >
-                                Document 등록
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-row>
+                <div style="text-align: left; font-size: larger; font-weight: bold; margin-top: 20px;">파일 뷰어</div>
+                <Document tag="viewer" :id="id"></Document>
             </div>
         </v-col>
-        <v-row>
+        <!-- <v-row>
             <DocumentDocument :offline="offline" class="video-card" v-for="(value, index) in values" v-model="values[index]" v-bind:key="index" @delete="remove"/>
-        </v-row>
+        </v-row> -->
     </div>
 </template>
 
 <script>
 
     const axios = require('axios').default;
-    import DocumentDocument from './../DocumentDocument.vue';
+    import Document from './../Document.vue';
 
     export default {
         name: 'DocumentDocumentManager',
         components: {
-            DocumentDocument,
+            Document,
         },
         props: {
             offline: Boolean
         },
         data: () => ({
             values: [],
-            newValue: {},
-            tick : true,
-            openDialog : false,
         }),
         async created() {
             var me = this;
-            if(me.offline){
-                if(!me.values) me.values = [];
-                return;
-            } 
-
             var temp = await axios.get(axios.fixUrl('/documents'))
             me.values = temp.data._embedded.documents;
-            
-            me.newValue = {
-                'name': '',
-                'userId': '',
-                'userName': '',
-                'text': '',
-                'timeStamp': '2025-01-20',
-                'status': '',
-                'reason': '',
-            }
         },
         methods:{
-            closeDialog(){
-                this.openDialog = false
-            },
-            append(value){
-                this.tick = false
-                this.newValue = {}
-                this.values.push(value)
-                
-                this.$emit('input', this.values);
-
-                this.$nextTick(function(){
-                    this.tick=true
-                })
-            },
-            remove(value){
-                var where = -1;
-                for(var i=0; i<this.values.length; i++){
-                    if(this.values[i]._links.self.href == value._links.self.href){
-                        where = i;
-                        break;
-                    }
-                }
-
-                if(where > -1){
-                    this.values.splice(i, 1);
-                    this.$emit('input', this.values);
-                }
-            },
+            
         }
     };
 </script>

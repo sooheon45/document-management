@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class SearchTextCommand {
 
-    private String text;
+    private String text; // 검색 텍스트
 }

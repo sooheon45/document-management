@@ -6,23 +6,23 @@ Vue.use(Router);
 
 
 import DocumentDocumentManager from "./components/listers/DocumentDocumentCards"
-import DocumentDocumentDetail from "./components/listers/DocumentDocumentDetail"
+import ViewerComponent from "./components/ViewerComponent"
 
 
 export default new Router({
     // mode: 'history',
     base: process.env.BASE_URL,
     routes: [
-            {
-                path: '/documents/documents',
-                name: 'DocumentDocumentManager',
-                component: DocumentDocumentManager
-            },
-            {
-                path: '/documents/documents/:id',
-                name: 'DocumentDocumentDetail',
-                component: DocumentDocumentDetail
-            },
+        {
+            path: '/files',
+            name: 'DocumentDocumentManager',
+            component: DocumentDocumentManager
+        },
+        {
+            path: '/file/:id',
+            name: 'ViewerComponent',
+            component: ViewerComponent
+        },
 
 
 

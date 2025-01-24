@@ -1,60 +1,38 @@
 package documentmanagement.domain;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import documentmanagement.DocumentApplication;
-import documentmanagement.domain.FileDownloaded;
-import documentmanagement.domain.FileFound;
-import documentmanagement.domain.FileSaved;
-import documentmanagement.domain.FilesFound;
-import documentmanagement.domain.TextSearched;
-import java.time.LocalDate;
+
+import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import javax.persistence.*;
+import javax.sql.rowset.serial.SerialException;
+import org.springframework.web.multipart.MultipartFile;
 import lombok.Data;
 
 @Entity
-@Table(name = "Document_table")
+@Table(name = "Document_table", indexes = @Index(columnList = "name"))
 @Data
-//<<< DDD / Aggregate Root
 public class Document {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    private String userId;
+    private String userName;
+    private String fileType;
     private String name;
 
-    private String userId;
-
-    private String userName;
-
-    private String text;
+    private String previewPath;
+    private String filePath;
+    private Long fileSize;
 
     private Date timeStamp;
-
     private String status;
-
     private String reason;
 
+   
     @PostPersist
-    public void onPostPersist() {
-        FilesFound filesFound = new FilesFound(this);
-        filesFound.publishAfterCommit();
-
-        FileSaved fileSaved = new FileSaved(this);
-        fileSaved.publishAfterCommit();
-
-        TextSearched textSearched = new TextSearched(this);
-        textSearched.publishAfterCommit();
-
-        FileDownloaded fileDownloaded = new FileDownloaded(this);
-        fileDownloaded.publishAfterCommit();
-
-        FileFound fileFound = new FileFound(this);
-        fileFound.publishAfterCommit();
-    }
+    public void onPostPersist() {}
 
     public static DocumentRepository repository() {
         DocumentRepository documentRepository = DocumentApplication.applicationContext.getBean(
@@ -63,33 +41,51 @@ public class Document {
         return documentRepository;
     }
 
-    //<<< Clean Arch / Port Method
-    public void saveFile(SaveFileCommand saveFileCommand) {
-        //implement business logic here:
-
+    public void saveFile(MultipartFile file) throws SerialException, SQLException {
+        setName(file.getOriginalFilename());
+        setFileType(file.getContentType());
+        setFileSize(file.getSize());
+        setTimeStamp(new Date());
+              
+        FileSaved fileSaved = new FileSaved(this);
+        fileSaved.setName(file.getOriginalFilename());
+        fileSaved.setTimeStamp(new Date());
+        fileSaved.setStatus("SUCCESS");
+        fileSaved.setReason("파일이 저장되었습니다.");
+        fileSaved.publishAfterCommit();
     }
 
-    //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
-    public void searchText(SearchTextCommand searchTextCommand) {
-        //implement business logic here:
 
+    public void searchText(Integer size) {
+        TextSearched textSearched = new TextSearched(this);
+        textSearched.setSize(size);
+        textSearched.setStatus("SUCCESS");
+        textSearched.setReason("문서가 검색되었습니다.");
+        textSearched.publishAfterCommit();
     }
 
-    //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
     public void downloadFile(DownloadFileCommand downloadFileCommand) {
-        //implement business logic here:
-
+        FileDownloaded fileDownloaded = new FileDownloaded(this);
+        fileDownloaded.setId(downloadFileCommand.getId());
+        fileDownloaded.setStatus("SUCCESS");
+        fileDownloaded.setReason("파일이 다운로드되었습니다.");
+        fileDownloaded.publishAfterCommit();
     }
 
-    //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
-    public void findFile(FindFileCommand findFileCommand) {
-        //implement business logic here:
-
+    public void loadFile(Document document) {
+        FileLoaded fileLoaded = new FileLoaded(this);
+        fileLoaded.setId(document.getId());
+        fileLoaded.setStatus("SUCCESS");
+        fileLoaded.setReason("파일이 로드되었습니다.");
+        fileLoaded.publishAfterCommit();
     }
-    //>>> Clean Arch / Port Method
+
+    public void deleteFile(DeleteFileCommand deleteFileCommand) {
+        FileDeleted fileDeleted = new FileDeleted(this);
+        fileDeleted.setId(deleteFileCommand.getId());
+        fileDeleted.setStatus("SUCCESS");
+        fileDeleted.setReason("파일이 삭제되었습니다.");
+        fileDeleted.publishAfterCommit();
+    }
 
 }
-//>>> DDD / Aggregate Root

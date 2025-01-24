@@ -9,17 +9,17 @@ import lombok.*;
 //<<< DDD / Domain Event
 @Data
 @ToString
-public class TextSearched extends AbstractEvent {
+public class FileDeleted extends AbstractEvent {
 
-    private Integer size;
+    private Long id;
     private String status;
     private String reason;
 
-    public TextSearched(Document aggregate) {
+    public FileDeleted(Document aggregate) {
         super(aggregate);
     }
 
-    public TextSearched() {
+    public FileDeleted() {
         super();
     }
 }

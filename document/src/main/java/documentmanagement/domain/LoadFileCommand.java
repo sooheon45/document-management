@@ -5,7 +5,7 @@ import java.util.*;
 import lombok.Data;
 
 @Data
-public class FindFileCommand {
+public class LoadFileCommand {
 
     private String id;
 }
