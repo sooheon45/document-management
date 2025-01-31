@@ -58,9 +58,10 @@
             async search(){
                 this.loading = true
                 let documents = []
-                const response = await axios.post('/documents/searchtext', {
-                    text: this.searchText
-                },{
+                const response = await axios.get('/documents/searchtext', {
+                    params: {
+                        text: this.searchText
+                    },
                     headers: {
                         'Content-Type': 'application/json; charset=utf-8'
                     }

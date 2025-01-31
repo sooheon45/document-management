@@ -40,21 +40,12 @@ public class Thumbnail {
         public void processThumbnail(FileSaved fileSaved) {
             //implement business logic here:
              try {
-                String previewDir = "/Users/heon/Documents/workspace/testFiles/uploads/previews/";
                 String fileType = fileSaved.getFileType();
                 String filePath = fileSaved.getFilePath();
-                String fileName = fileSaved.getName();
-                String timestamp = String.valueOf(System.currentTimeMillis());
-                String tmpFileName = timestamp + "_" + fileName;
+                String previewPath = fileSaved.getPreviewPath();
                 BufferedImage previewImage = null;
 
-                String previewPath = Paths.get(previewDir, "preview_" + tmpFileName + ".png").toString();
-                File previewDirFile = new File(previewDir);
                 File file = new File(filePath);
-
-                
-               
-                if (!previewDirFile.exists()) previewDirFile.mkdirs();
                 if (fileType.equals("application/pdf")) {
                     PDDocument pdf = PDDocument.load(file);
                     PDFRenderer pdfRenderer = new PDFRenderer(pdf);

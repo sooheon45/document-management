@@ -19,6 +19,7 @@ public class FileSaved extends AbstractEvent {
     private String userName;
     private String fileType;
     private String filePath;
+    private String previewPath;
     private Date timeStamp;
     private String status;
     private String reason;

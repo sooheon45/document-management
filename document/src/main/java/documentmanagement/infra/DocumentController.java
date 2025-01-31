@@ -171,16 +171,16 @@ public class DocumentController {
 
     @RequestMapping(
         value = "/documents/searchtext",
-        method = RequestMethod.POST,
+        method = RequestMethod.GET,
         produces = "application/json;charset=UTF-8"
     )
     public List<Document> searchText(
         HttpServletRequest request,
         HttpServletResponse response,
-        @RequestBody SearchTextCommand searchTextCommand
+        @RequestParam(value = "text") String searchText 
     ) throws Exception {
         System.out.println("##### /document/searchText  called #####");
-        String searchText = searchTextCommand.getText().trim().toLowerCase();
+        searchText = searchText.trim().toLowerCase();
         // String searchText = new String(searchTextCommand.getText().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8).trim().toLowerCase();
         if (searchText.isEmpty()) {
             return List.of(); // 빈 검색어일 경우 빈 리스트 반환
