@@ -2,14 +2,9 @@ package documentmanagement.infra;
 
 import documentmanagement.domain.*;
 import documentmanagement.service.DocumentService;
-import javassist.bytecode.analysis.Frame;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.HttpHeaders;
@@ -78,8 +74,8 @@ public class DocumentController {
             String contentType = file.getContentType();
             String originalFilename = file.getOriginalFilename();
             String timestamp = String.valueOf(System.currentTimeMillis());
-            String fileName = Paths.get(originalFilename).toString();
-
+            String fileName = Paths.get(originalFilename).toString(); // 한글 깨짐 방지.
+            
             String tmpFileName = timestamp + "_" + originalFilename;
             String filePath = Paths.get(uploadDir, tmpFileName).toString();
             String previewPath = Paths.get(previewDir, "preview_" + tmpFileName + ".png").toString();
@@ -96,18 +92,15 @@ public class DocumentController {
                 Document document = new Document();
                 document.setName(fileName);
                 document.setFileType(contentType);
-                document.setFileType(contentType);
                 document.setFilePath(filePath);
                 document.setPreviewPath(previewPath);
                 document.setFileSize(file.getSize());
                 document.setTimeStamp(new Date()); 
                 
-                 // 미리보기 이미지 생성 및 경로 저장
-                documentService.saveFile(file, filePath);
-                documentService.generateAndSavePreviewImage(document, file, previewPath);
-               
-                document.saveFile(file);
+                 // 파일 저장.
+                FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(filePath));
                 documentRepository.save(document);
+                document.saveFile(file);
             } catch (Exception e) {
                 throw new RuntimeException("파일 저장 중 오류가 발생했습니다: " + e.getMessage());
             }

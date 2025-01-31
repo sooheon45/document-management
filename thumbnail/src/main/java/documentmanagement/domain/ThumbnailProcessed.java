@@ -2,8 +2,6 @@ package documentmanagement.domain;
 
 import documentmanagement.domain.*;
 import documentmanagement.infra.AbstractEvent;
-
-import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.*;
 import lombok.*;
@@ -11,23 +9,17 @@ import lombok.*;
 //<<< DDD / Domain Event
 @Data
 @ToString
-public class FileSaved extends AbstractEvent {
+public class ThumbnailProcessed extends AbstractEvent {
 
     private Long id;
-    private String name;
-    private String userId;
-    private String userName;
-    private String fileType;
-    private String filePath;
-    private Date timeStamp;
     private String status;
     private String reason;
 
-    public FileSaved(Document aggregate) {
+    public ThumbnailProcessed(Thumbnail aggregate) {
         super(aggregate);
     }
 
-    public FileSaved() {
+    public ThumbnailProcessed() {
         super();
     }
 }

@@ -44,6 +44,7 @@ public class Document {
     public void saveFile(MultipartFile file) throws SerialException, SQLException {
         FileSaved fileSaved = new FileSaved(this);
         fileSaved.setName(file.getOriginalFilename());
+        fileSaved.setFilePath(this.getFilePath());
         fileSaved.setTimeStamp(new Date());
         fileSaved.setStatus("SUCCESS");
         fileSaved.setReason("파일이 저장되었습니다.");
