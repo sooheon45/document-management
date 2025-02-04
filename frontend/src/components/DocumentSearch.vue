@@ -60,7 +60,7 @@
                 let documents = []
                 const response = await axios.get('/documents/searchtext', {
                     params: {
-                        text: this.searchText
+                        name: this.searchText
                     },
                     headers: {
                         'Content-Type': 'application/json; charset=utf-8'
@@ -69,7 +69,12 @@
                 if(response.data) {
                     response.data.forEach(async document => {
                         try {
-                            const response = await axios.get(`/documents/loadpreview/${document.id}`, { responseType: 'blob' });
+                            const response = await axios.get(`/documents/loadpreview`, { 
+                                params: {
+                                    id: document.id
+                                },
+                                responseType: 'blob'
+                            });
                             document.previewImage = URL.createObjectURL(response.data);
                             documents.push(document);
                         } catch (error){

@@ -1,18 +1,14 @@
 package documentmanagement.domain;
 
-import documentmanagement.domain.*;
-import documentmanagement.infra.AbstractEvent;
 import java.util.*;
-import lombok.*;
+import lombok.Data;
 
 @Data
-@ToString
-public class FileSaved extends AbstractEvent {
+public class UploadFileCommand {
 
     private Long id;
     private String name;
     private String filePath;
-    private String fileType;
     private String previewPath;
     private String status;
     private Date timeStamp;

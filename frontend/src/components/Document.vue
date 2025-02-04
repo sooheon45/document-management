@@ -50,7 +50,10 @@
 
                 me.isDone = false
                 const response = await axios.get(`/documents/${me.id}`)
-                const file = await axios.get(`/documents/loadfile/${me.id}`,{
+                const file = await axios.get(`/documents/loadfile`,{
+                    params: {
+                        id: me.id
+                    },
                     responseType: 'blob'
                 });
                 

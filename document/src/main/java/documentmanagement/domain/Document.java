@@ -17,8 +17,6 @@ public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String userId;
-    private String userName;
     private String fileType;
     private String name;
 
@@ -35,30 +33,20 @@ public class Document {
     public void onPostPersist() {}
 
     public static DocumentRepository repository() {
-        DocumentRepository documentRepository = DocumentApplication.applicationContext.getBean(
-            DocumentRepository.class
-        );
+        DocumentRepository documentRepository = DocumentApplication.applicationContext.getBean(DocumentRepository.class);
         return documentRepository;
     }
 
-    public void saveFile(MultipartFile file) throws SerialException, SQLException {
+    public void uploadFile(MultipartFile file) throws SerialException, SQLException {
         FileSaved fileSaved = new FileSaved(this);
-        fileSaved.setName(file.getOriginalFilename());
+        fileSaved.setName(getName());
         fileSaved.setFilePath(getFilePath());
+        fileSaved.setFileType(getFileType());
         fileSaved.setPreviewPath(getPreviewPath());
         fileSaved.setTimeStamp(new Date());
         fileSaved.setStatus("SUCCESS");
         fileSaved.setReason("파일이 저장되었습니다.");
         fileSaved.publishAfterCommit();
-    }
-
-
-    public void searchText(Integer size) {
-        TextSearched textSearched = new TextSearched(this);
-        textSearched.setSize(size);
-        textSearched.setStatus("SUCCESS");
-        textSearched.setReason("문서가 검색되었습니다.");
-        textSearched.publishAfterCommit();
     }
 
     public void downloadFile(DownloadFileCommand downloadFileCommand) {
@@ -67,14 +55,6 @@ public class Document {
         fileDownloaded.setStatus("SUCCESS");
         fileDownloaded.setReason("파일이 다운로드되었습니다.");
         fileDownloaded.publishAfterCommit();
-    }
-
-    public void loadFile(Document document) {
-        FileLoaded fileLoaded = new FileLoaded(this);
-        fileLoaded.setId(document.getId());
-        fileLoaded.setStatus("SUCCESS");
-        fileLoaded.setReason("파일을 불러왔습니다.");
-        fileLoaded.publishAfterCommit();
     }
 
     public void deleteFile(DeleteFileCommand deleteFileCommand) {

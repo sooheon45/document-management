@@ -15,13 +15,11 @@ public class FileSaved extends AbstractEvent {
 
     private Long id;
     private String name;
-    private String userId;
-    private String userName;
-    private String fileType;
     private String filePath;
+    private String fileType;
     private String previewPath;
-    private Date timeStamp;
     private String status;
+    private Date timeStamp;
     private String reason;
 
     public FileSaved(Document aggregate) {

@@ -50,7 +50,6 @@
             document: null,
         }),
         methods: {
-            
             download(){
                 if (this.document && this.document.file) {
                     axios.get(this.document.file, { responseType: 'blob' })

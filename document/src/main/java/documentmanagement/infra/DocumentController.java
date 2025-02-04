@@ -1,10 +1,9 @@
 package documentmanagement.infra;
 
 import documentmanagement.domain.*;
-import documentmanagement.service.DocumentService;
-
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,21 +42,19 @@ public class DocumentController {
     @Autowired
     DocumentRepository documentRepository;
 
-    @Autowired
-    DocumentService documentService;
 
     @RequestMapping(
-        value = "/documents/uploadFile",
+        value = "/documents/uploadfile",
         method = RequestMethod.POST,
-        consumes = "multipart/form-data",
         produces = "application/json;charset=UTF-8"
     )
     public Document uploadFile(
         HttpServletRequest request,
         HttpServletResponse response,
+        // @RequestBody UploadFileCommand uploadFileCommand
         @RequestPart("files") MultipartFile[] files // 추가된 부분
     ) throws Exception {
-        System.out.println("##### /document/saveFile  called #####");
+        System.out.println("##### /document/uploadFile  called #####");
         if (files == null || files.length == 0) {
             throw new RuntimeException("파일이 선택되지 않았습니다.");
         }
@@ -100,96 +97,13 @@ public class DocumentController {
                  // 파일 저장.
                 FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(filePath));
                 documentRepository.save(document);
-                document.saveFile(file);
+                document.uploadFile(file);
             } catch (Exception e) {
                 throw new RuntimeException("파일 저장 중 오류가 발생했습니다: " + e.getMessage());
             }
         }
 
-        return null;     
-    }
-
-    @RequestMapping(
-        value = "/documents/loadfile/{id}",
-        method = RequestMethod.GET,
-        produces = "application/json;charset=UTF-8"
-    )
-    public ResponseEntity<byte[]> loadFile(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        @PathVariable(value = "id") Long id
-    ) throws Exception {
-        System.out.println("##### /document/loadFile  called #####");
-        Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("문서를 찾을 수 없습니다"));
-        String filePath = document.getFilePath();
-
-        // 파일 서버에서 파일 읽기
-        File file = new File(filePath);
-        Path path = file.toPath();
-        byte[] fileBytes = Files.readAllBytes(path);
-
-        if (fileBytes == null || fileBytes.length == 0) {
-            throw new RuntimeException("파일을 읽을 수 없습니다");
-        }
-
-        // Content-Type 헤더 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(document.getFileType()));
-        
-        document.loadFile(document);
-        return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(
-        value = "/documents/loadpreview/{id}",
-        method = RequestMethod.GET,
-        produces = "application/json;charset=UTF-8"
-    )
-    public ResponseEntity<byte[]> loadPreview(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        @PathVariable(value = "id") Long id
-    ) throws Exception {
-        Document document = documentRepository.findById(id).orElseThrow(() -> new RuntimeException("문서를 찾을 수 없습니다"));
-        String previewPath = document.getPreviewPath();
-
-        // 파일 서버에서 파일 읽기
-        File file = new File(previewPath);
-        Path path = file.toPath();
-        byte[] fileBytes = Files.readAllBytes(path);
-
-        if (fileBytes == null || fileBytes.length == 0) {
-            throw new RuntimeException("파일을 읽을 수 없습니다");
-        }
-
-        // Content-Type 헤더 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(document.getFileType()));
-        
-        return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(
-        value = "/documents/searchtext",
-        method = RequestMethod.GET,
-        produces = "application/json;charset=UTF-8"
-    )
-    public List<Document> searchText(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        @RequestParam(value = "text") String searchText 
-    ) throws Exception {
-        System.out.println("##### /document/searchText  called #####");
-        searchText = searchText.trim().toLowerCase();
-        // String searchText = new String(searchTextCommand.getText().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8).trim().toLowerCase();
-        if (searchText.isEmpty()) {
-            return List.of(); // 빈 검색어일 경우 빈 리스트 반환
-        }
-        List<Document> documents = documentRepository.findByNameContainingIgnoreCase(searchText); 
-        
-        Document document = new Document();
-        document.searchText(documents.size());
-        return documents.size() == 0 ? null : documents;
+        return null;    
     }
 
     @RequestMapping(
@@ -224,21 +138,71 @@ public class DocumentController {
         optionalDocument.orElseThrow(() -> new Exception("No Entity Found"));
         Document document = optionalDocument.get();
 
-        DeleteFileCommand deleteFileCommand = new DeleteFileCommand();
-        deleteFileCommand.setId(id);
-        
         File fileToDelete = new File(document.getFilePath());
         if (fileToDelete.exists()) {
             fileToDelete.delete();
         }
-
         File previewToDelete = new File(document.getPreviewPath());
         if (previewToDelete.exists()) {
             previewToDelete.delete();
         }
 
-        documentRepository.deleteById(id);
+        DeleteFileCommand deleteFileCommand = new DeleteFileCommand();
+        deleteFileCommand.setId(id);
         document.deleteFile(deleteFileCommand);
+
+        documentRepository.deleteById(id);
         return document;
     }
+
+    @GetMapping(path = "/documents/loadpreview")
+    public ResponseEntity<byte[]>  loadPreview(LoadPreviewQuery loadPreviewQuery) throws IOException {
+        System.out.println("##### /document/loadpreview  called #####");
+        Document document = documentRepository.findById(loadPreviewQuery.getId()).orElseThrow(() -> new RuntimeException("문서를 찾을 수 없습니다"));
+        String previewPath = document.getPreviewPath();
+
+        // 파일 서버에서 파일 읽기
+        File file = new File(previewPath);
+        Path path = file.toPath();
+        byte[] fileBytes = Files.readAllBytes(path);
+
+        if (fileBytes == null || fileBytes.length == 0) {
+            throw new RuntimeException("파일을 읽을 수 없습니다");
+        }
+
+        // Content-Type 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(document.getFileType()));
+        
+        return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/documents/loadfile")
+    public ResponseEntity<byte[]> loadFile(LoadFilesQuery loadFilesQuery) throws Exception {
+        System.out.println("##### /document/loadFile  called #####");
+        Document document = documentRepository.findById(loadFilesQuery.getId()).orElseThrow(() -> new RuntimeException("문서를 찾을 수 없습니다"));
+        String filePath = document.getFilePath();
+
+        HttpHeaders headers = new HttpHeaders();
+        File file = new File(filePath);
+        Path path = file.toPath();
+        byte[] fileBytes;
+
+        fileBytes = Files.readAllBytes(path);
+        if (fileBytes == null || fileBytes.length == 0) {
+            throw new RuntimeException("파일을 읽을 수 없습니다");
+        }
+        headers.setContentType(MediaType.parseMediaType(document.getFileType()));        
+
+        return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);            
+    }
+
+    @GetMapping(path = "/documents/searchtext")
+    public List<Document> searchtext(SearchTextQuery searchTextQuery) {
+        System.out.println("##### /document/searchText  called #####");
+        return documentRepository.searchtext(searchTextQuery.getName());
+    
+    }
+
+    
 }

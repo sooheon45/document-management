@@ -45,7 +45,12 @@
                         document.id = id;
 
                         try {
-                            const response = await axios.get(`/documents/loadpreview/${id}`, { responseType: 'blob' });
+                            const response = await axios.get(`/documents/loadpreview`, { 
+                                params: {
+                                    id: document.id
+                                },
+                                responseType: 'blob'
+                            });
                             document.previewImage = URL.createObjectURL(response.data);
                         } catch (error){
                             console.log(error)

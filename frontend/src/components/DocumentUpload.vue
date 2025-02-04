@@ -30,7 +30,7 @@
                 }
 
                 try {
-                    const response = await axios.post('/documents/uploadFile', formData, {
+                    const response = await axios.post('/documents/uploadfile', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
