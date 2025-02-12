@@ -43,7 +43,7 @@
     import Document from './../Document.vue';
 
     export default {
-        name: 'DocumentDocumentManager',
+        name: 'DocumentDocumentCards',
         components: {
             Document,
         },
