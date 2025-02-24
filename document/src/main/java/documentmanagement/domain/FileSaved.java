@@ -14,6 +14,7 @@ import lombok.*;
 public class FileSaved extends AbstractEvent {
 
     private Long id;
+    private Long itemId;
     private String name;
     private String filePath;
     private String fileType;

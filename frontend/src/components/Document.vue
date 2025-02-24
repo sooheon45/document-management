@@ -1,16 +1,16 @@
 <template>
     <div style="width: -webkit-fill-available; height: 100%;">
         <div v-if="tag == 'upload'" style="width: 100%; height: 100%;">
-            <DocumentUpload></DocumentUpload>
+            <DocumentUpload :itemId="itemId"></DocumentUpload>
         </div>
         <div v-if="tag == 'search'" style="width: 100%; height: 100%;">
-            <DocumentSearch></DocumentSearch>
+            <DocumentSearch/>
         </div>
         <div v-if="tag == 'list'" style="width: 100%; height: 100%;">
-            <DocumentLists></DocumentLists>
+            <DocumentLists/>
         </div>
         <div v-if="tag == 'viewer' && isDone" style="width: 100%; height: 100%;">
-            <DocumentViewer :type="type" :document="document"></DocumentViewer>
+            <DocumentViewer :itemId="itemId" :type="type" :document="document"></DocumentViewer>
         </div>
     </div>
 </template>
@@ -25,15 +25,16 @@
 
     export default {
         name: 'Document',
+        props: {
+            tag: String, // 사용할 태그 create, search, list, edit
+            id: String, // 문서 아이디
+            itemId: String, // 다른 서비스의 고유 id
+        },
         components: {
             DocumentUpload,
             DocumentSearch,
             DocumentLists,
             DocumentViewer
-        },
-        props: {
-            tag: String, // 사용할 태그 create, search, list, edit
-            id: String, // 문서 아이디
         },
         data: () => ({
             isDone: false,
@@ -52,7 +53,8 @@
                 const response = await axios.get(`/documents/${me.id}`)
                 const file = await axios.get(`/documents/loadfile`,{
                     params: {
-                        id: me.id
+                        id: me.id,
+                        itemId: me.itemId
                     },
                     responseType: 'blob'
                 });

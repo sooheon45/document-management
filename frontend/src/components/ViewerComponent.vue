@@ -1,6 +1,6 @@
 <template>
     <div v-if="id" style="height: 100%;">
-        <Document tag="viewer" :id="id"></Document>
+        <Document tag="viewer" :itemId="itemId" :id="id"></Document>
     </div>
 </template>
 
@@ -19,6 +19,8 @@
             var me = this
             if(me.id) me.id = null;
             me.id = me.$route.params.id
+
+            // me.itemId = '1'
         },
     }
 </script>

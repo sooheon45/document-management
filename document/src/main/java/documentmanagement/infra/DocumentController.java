@@ -46,15 +46,16 @@ public class DocumentController {
     @RequestMapping(
         value = "/documents/uploadfile",
         method = RequestMethod.POST,
-        produces = "application/json;charset=UTF-8"
+        produces = "application/json"
     )
     public Document uploadFile(
         HttpServletRequest request,
         HttpServletResponse response,
-        // @RequestBody UploadFileCommand uploadFileCommand
-        @RequestPart("files") MultipartFile[] files // 추가된 부분
+        @ModelAttribute UploadFileCommand uploadFileCommand
     ) throws Exception {
         System.out.println("##### /document/uploadFile  called #####");
+        Long itemId = uploadFileCommand.getItemId();
+        MultipartFile[] files = uploadFileCommand.getFiles();
         if (files == null || files.length == 0) {
             throw new RuntimeException("파일이 선택되지 않았습니다.");
         }
@@ -87,6 +88,7 @@ public class DocumentController {
             try {
                 // Document 객체 생성 및 저장
                 Document document = new Document();
+                document.setItemId(itemId);
                 document.setName(fileName);
                 document.setFileType(contentType);
                 document.setFilePath(filePath);
@@ -119,7 +121,6 @@ public class DocumentController {
         System.out.println("##### /document/downloadFile  called #####");
         Document document = new Document();
         document.downloadFile(downloadFileCommand);
-        documentRepository.save(document);
         return document;
     }
 

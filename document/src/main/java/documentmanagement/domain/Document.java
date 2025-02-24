@@ -17,6 +17,7 @@ public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private Long itemId;
     private String fileType;
     private String name;
 
@@ -39,6 +40,7 @@ public class Document {
 
     public void uploadFile(MultipartFile file) throws SerialException, SQLException {
         FileSaved fileSaved = new FileSaved(this);
+        fileSaved.setItemId(getItemId());
         fileSaved.setName(getName());
         fileSaved.setFilePath(getFilePath());
         fileSaved.setFileType(getFileType());
@@ -52,6 +54,7 @@ public class Document {
     public void downloadFile(DownloadFileCommand downloadFileCommand) {
         FileDownloaded fileDownloaded = new FileDownloaded(this);
         fileDownloaded.setId(downloadFileCommand.getId());
+        fileDownloaded.setItemId(downloadFileCommand.getItemId());
         fileDownloaded.setStatus("SUCCESS");
         fileDownloaded.setReason("파일이 다운로드되었습니다.");
         fileDownloaded.publishAfterCommit();
@@ -60,6 +63,7 @@ public class Document {
     public void deleteFile(DeleteFileCommand deleteFileCommand) {
         FileDeleted fileDeleted = new FileDeleted(this);
         fileDeleted.setId(deleteFileCommand.getId());
+        fileDeleted.setItemId(getItemId());
         fileDeleted.setStatus("SUCCESS");
         fileDeleted.setReason("파일이 삭제되었습니다.");
         fileDeleted.publishAfterCommit();

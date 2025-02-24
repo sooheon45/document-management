@@ -14,21 +14,20 @@
             </v-row>
         </v-card>
         <v-col style="margin-bottom:40px;">
-            <div class="text-center">
+            <div class="text-center" v-if="itemId">
                 <div style="text-align: left; font-size: larger; font-weight: bold;">새 파일</div>
-                <Document tag="upload" style="width: 150px; height: 50px;"></Document>
+                <Document tag="upload" :itemId="itemId" style="width: 150px; height: 50px;"></Document>
                 
-
                 <div style="text-align: left; font-size: larger; font-weight: bold; margin-top: 20px;">파일 리스트</div>
-                <Document tag="list"></Document>
+                <Document tag="list" :itemId="itemId"></Document>
                 <v-spacer></v-spacer>
 
                 <div style="text-align: left; font-size: larger; font-weight: bold; margin-top: 20px;">파일 검색</div>
-                <Document tag="search"></Document>
+                <Document tag="search" :itemId="itemId"></Document>
                 <v-spacer></v-spacer>
 
                 <div style="text-align: left; font-size: larger; font-weight: bold; margin-top: 20px;">파일 뷰어</div>
-                <Document tag="viewer" :id="id"></Document>
+                <Document tag="viewer" :itemId="itemId" :id="id"></Document>
             </div>
         </v-col>
         <!-- <v-row>
@@ -38,8 +37,6 @@
 </template>
 
 <script>
-
-    const axios = require('axios').default;
     import Document from './../Document.vue';
 
     export default {
@@ -52,14 +49,10 @@
         },
         data: () => ({
             values: [],
+            itemId: null,
         }),
-        async created() {
-            var me = this;
-            var temp = await axios.get(axios.fixUrl('/documents'))
-            me.values = temp.data._embedded.documents;
-        },
-        methods:{
-            
+        created() {
+            // this.itemId = '1'
         }
     };
 </script>

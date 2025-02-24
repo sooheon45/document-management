@@ -12,6 +12,7 @@ import lombok.*;
 public class FileDownloaded extends AbstractEvent {
 
     private Long id;
+    private Long itemId;
     private String status;
     private String reason;
 

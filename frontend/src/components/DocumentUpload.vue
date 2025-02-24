@@ -12,7 +12,7 @@
     export default {
         name: 'DocumentUpload',
         props: {
-          
+            itemId: String,
         },
         data: () => ({
             loading: false,
@@ -25,6 +25,7 @@
                 }
 
                 const formData = new FormData();
+                formData.append('itemId', this.itemId); // 다른 서비스의 고유 id
                 for (let i = 0; i < files.length; i++) {
                     formData.append('files', files[i]);
                 }

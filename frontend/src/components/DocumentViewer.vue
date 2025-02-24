@@ -43,7 +43,8 @@
         components:{},
         props: {
             type: String, // pdf, text, image, video
-            document: Object
+            document: Object,
+            itemId: String
         },
         data: () => ({
             updateKey: 0,
@@ -63,7 +64,8 @@
                             document.body.removeChild(link);
                             URL.revokeObjectURL(url);
                             await axios.post('/documents/downloadfile', {
-                                id: this.document.documentId
+                                id: this.document.documentId,
+                                itemId: this.itemId
                             });
                         })
                         .catch(error => {
