@@ -1,26 +1,28 @@
 <template>
     <div>
-        <div>
-            <v-text-field
-                :loading="loading"
-                v-model="searchText"
-                append-inner-icon="mdi-magnify"
-                density="compact"
-                label="Search"
-                variant="solo"
-                hide-details
-                single-line
-                @click:append-inner="search()"
-                @keyup.enter="search()"
-            ></v-text-field>
-        </div>
-        <div v-if="searchValues.length > 0" style="height: 500px;">
+        <v-divider class="my-2"></v-divider>
+        <div style="text-align: left; font-size: larger; font-weight: bold;">파일 검색</div>
+        <v-text-field
+            :loading="loading"
+            v-model="searchText"
+            append-inner-icon="mdi-magnify"
+            label="파일 이름"
+            dense
+            hide-details
+            outlined
+            single-line
+            @click:append-inner="search()"
+            @keyup.enter="search()"
+        ></v-text-field>
+        <div v-if="searchValues.length > 0">
             <div style="display: flex; flex-direction: row;">
                 <v-list  v-for="(document, index) in searchValues" :key="index">
-                    <v-card style="width: 300px; height: 150px; margin: 5px;" @click="goDocument(document)">
-                        <v-card-text style="background-color: white; padding: 0px;">
+                    <v-card @click="goDocument(document)"
+                        outlined
+                    >
+                        <v-card-text>
                             <div style="height: 230px;align-content: center;">
-                                <img :src="document.previewImage" style="max-width: 100%; max-height: 100%"/>
+                                <img :src="document.previewImage" style="max-width: 100%; max-height: 100%; display: block; margin: auto;"/>
                             </div>
                             <div style="margin-left: 10px;">
                                 <String label="이름" v-model="document.name" style="justify-items: left;"/>

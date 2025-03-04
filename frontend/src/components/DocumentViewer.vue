@@ -22,14 +22,16 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
-        <div v-if="type && type.includes('image')" style="height: 100%;">
-            <img :src="document.file" :alt="document.name" style="max-width: 100%; height: auto;" />
-        </div>
-        <div v-if="type && type.includes('pdf')" style="height: 100%; margin-left: 5px; margin-bottom: 5px;">
-            <embed :src="document.file" type="application/pdf" width="100%" height="100%" />
-        </div>
-        <div v-if="type && type.includes('video')" style="height: 100%;">
-            <video :src="document.file" controls width="100%" height="50%"></video>
+        <div class="pa-4">
+            <div v-if="type && type.includes('image')" style="height: 100%;">
+                <img :src="document.file" :alt="document.name" style="max-width: 100%; height: auto;" />
+            </div>
+            <div v-if="type && type.includes('pdf')" style="height: 100%; margin-left: 5px; margin-bottom: 5px;">
+                <embed :src="document.file" type="application/pdf" width="100%" height="100%" />
+            </div>
+            <div v-if="type && type.includes('video')" style="height: 100%;">
+                <video :src="document.file" controls width="100%" height="50%"></video>
+            </div>
         </div>
     </div> 
 </template>

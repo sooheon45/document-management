@@ -50,8 +50,8 @@ logging:
     org.springframework.cloud: debug
 
 file:
-    upload: "/Users/heon/Documents/workspace/testFiles/uploads/"
-    preview: "/Users/heon/Documents/workspace/testFiles/uploads/previews/"
+    upload: "/Users/kibumpark/Documents/workspace/testFiles/uploads/"
+    preview: "/Users/kibumpark/Documents/workspace/testFiles/uploads/previews/"
 
 server:
   port: 8082

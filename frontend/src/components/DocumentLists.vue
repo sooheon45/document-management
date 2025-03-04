@@ -1,11 +1,20 @@
 <template>
     <div>
-        <div style="display: flex; flex-direction: row; height: 500px;">
-            <v-list v-for="(document, index) in documents" :key="index" style="width: 250px; height: 300px;">
-                <v-card @click="goDocument(document)" style="width: 220px; height: 320px; margin: 5px;">
-                    <v-card-text style="background-color: white; padding: 0px;">
-                        <div style="height: 230px;align-content: center;">
-                            <img :src="document.previewImage" style="max-width: 100%; max-height: 100%"/>
+        <v-divider class="my-2"></v-divider>
+        <div style="text-align: left; font-size: larger; font-weight: bold;">파일 리스트</div>
+        <v-row class="ma-0 pa-0">
+            <v-col v-for="(document, index) in documents" :key="index"
+                cols="12"
+                lg="3"
+                md="4"
+                sm="6"
+            >
+                <v-card @click="goDocument(document)"
+                    outlined
+                >
+                    <v-card-text class="ma-0 pa-0">
+                        <div class="pa-2" style="height: 230px;">
+                            <img :src="document.previewImage" style="max-width: 100%; max-height: 100%; display: block; margin: auto;"/>
                         </div>
                         <div style="margin-left: 10px;">
                             <String label="이름" v-model="document.name" style="justify-items: left;"/>
@@ -15,8 +24,8 @@
                         </div>
                     </v-card-text>
                 </v-card>
-            </v-list>
-        </div>
+            </v-col>
+        </v-row>
     </div>
 </template>
 

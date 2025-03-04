@@ -14,21 +14,18 @@
             </v-row>
         </v-card>
         <v-col style="margin-bottom:40px;">
-            <div class="text-center" v-if="itemId">
-                <div style="text-align: left; font-size: larger; font-weight: bold;">새 파일</div>
-                <Document tag="upload" :itemId="itemId" style="width: 150px; height: 50px;"></Document>
+            <v-card class="pa-4" v-if="itemId">
+                <Document tag="upload" :itemId="itemId"></Document>
                 
-                <div style="text-align: left; font-size: larger; font-weight: bold; margin-top: 20px;">파일 리스트</div>
                 <Document tag="list" :itemId="itemId"></Document>
                 <v-spacer></v-spacer>
 
-                <div style="text-align: left; font-size: larger; font-weight: bold; margin-top: 20px;">파일 검색</div>
                 <Document tag="search" :itemId="itemId"></Document>
                 <v-spacer></v-spacer>
 
                 <div style="text-align: left; font-size: larger; font-weight: bold; margin-top: 20px;">파일 뷰어</div>
                 <Document tag="viewer" :itemId="itemId" :id="id"></Document>
-            </div>
+            </v-card>
         </v-col>
         <!-- <v-row>
             <DocumentDocument :offline="offline" class="video-card" v-for="(value, index) in values" v-model="values[index]" v-bind:key="index" @delete="remove"/>

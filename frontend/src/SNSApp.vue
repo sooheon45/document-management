@@ -35,7 +35,7 @@
                     <v-list-item
                         class="px-2"
                         key="documents"
-                        to="/documents/documents"
+                        to="/files"
                         @click="changeUrl()"
                         color="primary"
                         style="font-weight:700;"
@@ -126,7 +126,7 @@ export default {
                 title: 'Document', 
                 description: 'Document을 관리하는 화면입니다.', 
                 key: 'documents', 
-                route: '/documents/documents',
+                route: '/files',
                 ImageUrl: '',
             },
             

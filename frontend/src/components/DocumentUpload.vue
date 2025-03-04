@@ -1,6 +1,6 @@
 <template>
-    <div style="width: -webkit-fill-available; height: -webkit-fill-available;">
-        <v-btn @click="$refs.fileInput.click()" style="width: -webkit-fill-available; height: -webkit-fill-available;">파일 업로드</v-btn>
+    <div>
+        <v-btn @click="$refs.fileInput.click()" color="primary">파일 업로드</v-btn>
         <input type="file" ref="fileInput" @change="uploadFile" multiple style="display: none;" /> 
     </div>
 </template>

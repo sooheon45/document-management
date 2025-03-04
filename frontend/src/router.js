@@ -23,8 +23,5 @@ export default new Router({
             name: 'ViewerComponent',
             component: ViewerComponent
         },
-
-
-
     ]
 })
